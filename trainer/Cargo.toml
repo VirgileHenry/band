@@ -1,0 +1,10 @@
+[package]
+name = "trainer"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+burn =  { version = "0.20.0", default-features = false, features = ["std", "wgpu", "ndarray", "train", "dataset", "fusion", "tui"] }
+env_logger = { workspace = true }
+model = { workspace = true }

@@ -1,0 +1,20 @@
+[package]
+name = "sound_stream"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+audioadapter = "3.0.0"
+audioadapter-buffers = "3.0.0"
+config = { workspace = true }
+log = { workspace = true }
+realfft = "3.5.0"
+rubato = "3.0.0"
+
+[[bin]]
+name = "test_mel"
+path = "bin/test_mel.rs"
+[[bin]]
+name = "test_silence"
+path = "bin/test_silence.rs"

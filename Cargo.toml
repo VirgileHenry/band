@@ -1,18 +1,18 @@
-[package]
-name = "band"
+[workspace]
+members = ["band", "config", "data_process", "model", "sound_stream", "trainer"]
+resolver = "3"
+
+[workspace.package]
 version = "0.1.0"
 edition = "2024"
+authors = ["Virgile HENRY"]
 
-[dependencies]
-burn =  { version = "0.20.0", features = ["std", "wgpu", "ndarray", "train", "dataset", "fusion", "tui"], default-features = false }
+[workspace.dependencies]
+config = { path = "config" }
 cpal = "0.15"
 env_logger = "0.11.5"
 log = "0.4.22"
-ndarray = "0.17.2"
-ndarray-npy = "0.10.0"
+model = { path = "model" }
 rand = "0.10.1"
-symphonia = { version = "0.5", features = ["mp3", "isomp4", "aac"] }
-
-[[bin]]
-name = "train"
-path = "bin/train.rs"
+sound_stream = { path = "sound_stream" }
+symphonia = { version = "0.5", features = ["all"] }

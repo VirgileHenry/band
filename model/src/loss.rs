@@ -8,7 +8,7 @@ pub struct Loss<B: burn::prelude::Backend> {
 impl<B: burn::prelude::Backend> Loss<B> {
     pub fn init(device: &B::Device) -> Self {
         /* Since onset are rarely present, we need to weight them positively to not learn "zero everywhere" */
-        let onset_weights = burn::Tensor::<B, 1>::from_floats([50.0; crate::config::INSTRUMENT_COUNT], device);
+        let onset_weights = burn::Tensor::<B, 1>::from_floats([50.0; config::INSTRUMENT_COUNT], device);
 
         let onset_bce = burn::nn::loss::BinaryCrossEntropyLossConfig::new()
             .with_logits(true)

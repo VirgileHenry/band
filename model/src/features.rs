@@ -8,8 +8,8 @@ pub struct ChunkFeatures<B: burn::prelude::Backend> {
 
 impl<B: burn::prelude::Backend> ChunkFeatures<B> {
     pub fn from_data(device: &B::Device, data: Vec<f32>, batch_size: usize) -> Self {
-        let chunk_length = crate::config::TIME_CHUNK_LENGTH;
-        let mel_freq_count = crate::config::MEL_FREQ_COUNT;
+        let chunk_length = config::TIME_CHUNK_LENGTH;
+        let mel_freq_count = config::MEL_FREQ_COUNT;
 
         if data.len() != batch_size * chunk_length * mel_freq_count {
             log::error!(

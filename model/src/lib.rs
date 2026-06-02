@@ -1,4 +1,3 @@
-mod config;
 mod data;
 mod features;
 mod labels;

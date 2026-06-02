@@ -12,8 +12,8 @@ pub struct ChunkLabels<B: burn::prelude::Backend> {
 
 impl<B: burn::prelude::Backend> ChunkLabels<B> {
     pub fn from_data(device: &B::Device, onsets: Vec<f32>, actives: Vec<f32>, batch_size: usize) -> Self {
-        let chunk_length = crate::config::TIME_CHUNK_LENGTH;
-        let instrument_count = crate::config::INSTRUMENT_COUNT;
+        let chunk_length = config::TIME_CHUNK_LENGTH;
+        let instrument_count = config::INSTRUMENT_COUNT;
 
         if onsets.len() != batch_size * chunk_length * instrument_count {
             log::error!(

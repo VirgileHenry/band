@@ -21,13 +21,13 @@ pub struct Model<B: burn::prelude::Backend> {
 impl<B: burn::prelude::Backend> Model<B> {
     pub fn init(device: &B::Device) -> Self {
         let padding = burn::nn::PaddingConfig2d::Same;
-        let conv_layer_1_config = burn::nn::conv::Conv2dConfig::new([1, 16], [5, 5]).with_padding(padding.clone());
-        let conv_layer_2_config = burn::nn::conv::Conv2dConfig::new([16, 32], [3, 3]).with_padding(padding.clone());
+        let conv_layer_1_config = burn::nn::conv::Conv2dConfig::new([1, 4], [3, 3]).with_padding(padding.clone());
+        let conv_layer_2_config = burn::nn::conv::Conv2dConfig::new([4, 8], [3, 3]).with_padding(padding.clone());
 
-        let pool_config = burn::nn::pool::MaxPool2dConfig::new([1, crate::config::MEL_FREQ_COUNT]);
+        let pool_config = burn::nn::pool::MaxPool2dConfig::new([1, config::MEL_FREQ_COUNT]);
 
-        let onset_head_config = burn::nn::LinearConfig::new(32, crate::config::INSTRUMENT_COUNT);
-        let active_head_config = burn::nn::LinearConfig::new(32, crate::config::INSTRUMENT_COUNT);
+        let onset_head_config = burn::nn::LinearConfig::new(8, config::INSTRUMENT_COUNT);
+        let active_head_config = burn::nn::LinearConfig::new(8, config::INSTRUMENT_COUNT);
 
         Self {
             conv_layer_1: conv_layer_1_config.init(device),

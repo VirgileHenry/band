@@ -9,12 +9,14 @@ pkgs.mkShell rec {
     pkgs.rustc
     pkgs.rustfmt
     pkgs.lld_20
+    pkgs.mold
 
     pkgs.python313
     pkgs.python313Packages.numpy
     pkgs.python313Packages.librosa
     pkgs.python313Packages.mido
     pkgs.python313Packages.matplotlib
+    pkgs.python313Packages.sounddevice
   ];
   buildInputs = [
     pkgs.udev

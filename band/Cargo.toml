@@ -1,0 +1,15 @@
+[package]
+name = "band"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+# bevy = { version = "0.18.1", features = ["file_watcher"] }
+# bevy-inspector-egui = { version = "0.36.0" }
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3

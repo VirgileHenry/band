@@ -1,5 +1,5 @@
-type WgpuBackend = burn::backend::Wgpu<f32, i32>;
-type AutodiffBackend = burn::backend::Autodiff<WgpuBackend>;
+type Backend = burn::backend::Wgpu<f32, i32>;
+type AutodiffBackend = burn::backend::Autodiff<Backend>;
 
 fn main() -> std::io::Result<()> {
     /* Info in debug, warning in release. Can be overriden by the env. */
@@ -10,8 +10,8 @@ fn main() -> std::io::Result<()> {
 
     let training_config = TrainingConfig::new(burn::optim::AdamConfig::new());
 
-    let device = burn::backend::wgpu::WgpuDevice::default();
-    let model = band::TrainingModel::<AutodiffBackend>::init(&device);
+    let device = <Backend as burn::prelude::Backend>::Device::default();
+    let model = model::TrainingModel::<AutodiffBackend>::init(&device);
 
     create_artifact_dir(artifacts_dir);
     train::<AutodiffBackend>(artifacts_dir, training_config, device, model)?;
@@ -44,25 +44,25 @@ pub fn train<B: burn::tensor::backend::AutodiffBackend>(
     artifact_dir: &str,
     training_config: TrainingConfig,
     device: B::Device,
-    model: band::TrainingModel<B>,
+    model: model::TrainingModel<B>,
 ) -> std::io::Result<()> {
     B::seed(&device, training_config.seed);
 
     let dataset_root = "dataset/processed";
-    let training_dataset = band::EgmdDataset::load_train(dataset_root)?;
-    let validation_dataset = band::EgmdDataset::load_valid(dataset_root)?;
+    let training_dataset = model::EgmdDataset::load(dataset_root)?;
+    let (train, valid) = training_dataset.split(0.9, training_config.seed);
 
-    let dataloader_train = burn::data::dataloader::DataLoaderBuilder::new(band::ChunkBatcher)
+    let dataloader_train = burn::data::dataloader::DataLoaderBuilder::new(model::ChunkBatcher::new(&train))
         .batch_size(training_config.batch_size)
         .shuffle(training_config.seed)
         .num_workers(training_config.num_workers)
-        .build(training_dataset);
+        .build(train);
 
-    let dataloader_valid = burn::data::dataloader::DataLoaderBuilder::new(band::ChunkBatcher)
+    let dataloader_valid = burn::data::dataloader::DataLoaderBuilder::new(model::ChunkBatcher::new(&valid))
         .batch_size(training_config.batch_size)
         .shuffle(training_config.seed)
         .num_workers(training_config.num_workers)
-        .build(validation_dataset);
+        .build(valid);
 
     let training = burn::train::SupervisedTraining::new(artifact_dir, dataloader_train, dataloader_valid)
         .metrics((burn::train::metric::LossMetric::new(),))

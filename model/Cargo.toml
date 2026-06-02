@@ -1,0 +1,14 @@
+[package]
+name = "model"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+burn =  { version = "0.20.0", default-features = false }
+config = { workspace = true }
+env_logger = { workspace = true }
+log = { workspace = true }
+memmap2 = "0.9.10"
+rand.workspace = true
+walkdir = "2.5.0"

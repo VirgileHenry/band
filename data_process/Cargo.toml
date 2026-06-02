@@ -1,0 +1,16 @@
+[package]
+name = "data_process"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+argh = "0.1.19"
+config = { workspace = true }
+csv = "1.4.0"
+env_logger = { workspace = true }
+log = { workspace = true }
+midly = "0.5"
+sound_stream = { workspace = true }
+symphonia = { workspace = true }
+serde = { version = "1", features = ["derive"] }
