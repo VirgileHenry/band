@@ -9,4 +9,6 @@ mod training;
 
 pub use data::ChunkBatcher;
 pub use data::EgmdDataset;
+pub use features::ChunkFeatures;
+pub use model::Model;
 pub use training::TrainingModel;

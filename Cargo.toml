@@ -1,5 +1,5 @@
 [workspace]
-members = ["band", "config", "data_process", "model", "sound_stream", "trainer"]
+members = ["band", "band-cli", "config", "data_process", "model", "sound_stream", "trainer"]
 resolver = "3"
 
 [workspace.package]
@@ -8,6 +8,7 @@ edition = "2024"
 authors = ["Virgile HENRY"]
 
 [workspace.dependencies]
+burn = { version = "0.20.0", default-features = false }
 config = { path = "config" }
 cpal = "0.15"
 env_logger = "0.11.5"

@@ -21,8 +21,8 @@ pub struct Model<B: burn::prelude::Backend> {
 impl<B: burn::prelude::Backend> Model<B> {
     pub fn init(device: &B::Device) -> Self {
         let padding = burn::nn::PaddingConfig2d::Same;
-        let conv_layer_1_config = burn::nn::conv::Conv2dConfig::new([1, 4], [3, 3]).with_padding(padding.clone());
-        let conv_layer_2_config = burn::nn::conv::Conv2dConfig::new([4, 8], [3, 3]).with_padding(padding.clone());
+        let conv_layer_1_config = burn::nn::conv::Conv2dConfig::new([1, 6], [3, 3]).with_padding(padding.clone());
+        let conv_layer_2_config = burn::nn::conv::Conv2dConfig::new([6, 12], [3, 3]).with_padding(padding.clone());
 
         let pool_config = burn::nn::pool::MaxPool2dConfig::new([1, config::MEL_FREQ_COUNT]);
 
