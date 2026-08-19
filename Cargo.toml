@@ -1,5 +1,5 @@
 [workspace]
-members = ["band", "band-cli", "config", "data_process", "model", "sound_stream", "trainer"]
+members = ["aubio_test", "band_audio_input", "band_frame_extractor"]
 resolver = "3"
 
 [workspace.package]
@@ -8,12 +8,10 @@ edition = "2024"
 authors = ["Virgile HENRY"]
 
 [workspace.dependencies]
-burn = { version = "0.20.0", default-features = false }
-config = { path = "config" }
-cpal = "0.15"
-env_logger = "0.11.5"
-log = "0.4.22"
-model = { path = "model" }
-rand = "0.10.1"
-sound_stream = { path = "sound_stream" }
-symphonia = { version = "0.5", features = ["all"] }
+# Own crates
+band_audio_input = { path = "./band_audio_input" }
+band_frame_extractor = { path = "./band_frame_extractor" }
+
+# Dependencies
+rubato = "5.0.0"
+tracing = "0.1.44"

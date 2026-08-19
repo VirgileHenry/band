@@ -1,0 +1,8 @@
+[package]
+name = "band_frame_extractor"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+band_audio_input = { workspace = true }

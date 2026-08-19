@@ -1,7 +1,10 @@
 [package]
-name = "config"
+name = "aubio_test"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+anyhow = "1.0.104"
+aubio-rs = "0.2.0"
+cpal = "0.18.1"

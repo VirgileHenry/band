@@ -1,0 +1,9 @@
+[package]
+name = "band_audio_input"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+rubato = { workspace = true }
+tracing = { workspace = true }

@@ -3,22 +3,15 @@
 pkgs.mkShell rec {
   nativeBuildInputs = [
     pkgs.pkg-config
-
     pkgs.cargo
     pkgs.cargo-flamegraph
     pkgs.rustc
     pkgs.rustfmt
     pkgs.lld_20
     pkgs.mold
-
-    pkgs.python313
-    pkgs.python313Packages.numpy
-    pkgs.python313Packages.librosa
-    pkgs.python313Packages.mido
-    pkgs.python313Packages.matplotlib
-    pkgs.python313Packages.sounddevice
   ];
   buildInputs = [
+    pkgs.aubio
     pkgs.udev
     pkgs.alsa-lib-with-plugins
     pkgs.vulkan-loader
@@ -32,4 +25,5 @@ pkgs.mkShell rec {
   LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
   RUST_BACKTRACE=1;
   TMPDIR="/tmp";
+  CFLAGS = "-D_DEFAULT_SOURCE";
 }
