@@ -5,5 +5,7 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+cpal = { workspace = true }
+ringbuf = { workspace = true }
 rubato = { workspace = true }
 tracing = { workspace = true }

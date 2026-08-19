@@ -1,5 +1,9 @@
 [workspace]
-members = ["aubio_test", "band_audio_input", "band_frame_extractor"]
+members = [
+    "band_audio_input",
+    "band_frame_extractor",
+    "band_tools"
+]
 resolver = "3"
 
 [workspace.package]
@@ -11,7 +15,11 @@ authors = ["Virgile HENRY"]
 # Own crates
 band_audio_input = { path = "./band_audio_input" }
 band_frame_extractor = { path = "./band_frame_extractor" }
+band_tools = { path = "./band_tools" }
 
 # Dependencies
+cpal = "0.18.2"
+ringbuf = "0.5.1"
 rubato = "5.0.0"
 tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
