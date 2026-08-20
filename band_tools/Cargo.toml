@@ -6,9 +6,16 @@ authors.workspace = true
 
 [dependencies]
 band_audio_input = { workspace = true }
+band_frame_extractor = { workspace = true }
+eframe = "0.33.3"
+egui = "0.33.3"
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 
 [[bin]]
 name = "list_sources"
 path = "bin/list_sources.rs"
+
+[[bin]]
+name = "spectrogram"
+path = "bin/spectrogram.rs"

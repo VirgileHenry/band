@@ -2,6 +2,8 @@ mod error;
 #[cfg(test)]
 mod test;
 
+pub use error::FrameExtractorError;
+
 /// Structure to read a sound input and convert it to frames of frequencies.
 ///
 /// Fourier Transform is used to convert a sliding window of sound samples
@@ -10,7 +12,7 @@ mod test;
 /// All params are const generics, so that a hard type alias can be made
 /// and every other part uses the same config. This avoid bugs where the model is
 /// not trained on the same sample rate as the live audio, for instance
-pub struct FrameExtractor<I, const SAMPLE_RATE: usize, const WINDOW_SIZE: usize, const HOP: usize, const FREQ_BIN_COUNT: usize>
+pub struct FrameExtractor<I, const SAMPLE_RATE: usize, const WINDOW_SIZE: usize, const HOP: usize, const N_BINS: usize>
 where
     I: band_audio_input::AudioInputStream,
 {
@@ -31,26 +33,20 @@ where
     /// Scratch and input buffer for the FFT
     fft_scratch_input: [f32; WINDOW_SIZE],
     /// Output buffer for the FFT
-    fft_output: [realfft::num_complex::Complex<f32>; FREQ_BIN_COUNT],
+    fft_output: [realfft::num_complex::Complex<f32>; N_BINS],
 
     /// Tracker over the number of frames sent
     next_frame_index: usize,
 }
 
-impl<I, const SAMPLE_RATE: usize, const WINDOW_SIZE: usize, const HOP: usize, const FREQ_BIN_COUNT: usize>
-    FrameExtractor<I, SAMPLE_RATE, WINDOW_SIZE, HOP, FREQ_BIN_COUNT>
+impl<I, const SAMPLE_RATE: usize, const WINDOW_SIZE: usize, const HOP: usize, const N_BINS: usize>
+    FrameExtractor<I, SAMPLE_RATE, WINDOW_SIZE, HOP, N_BINS>
 where
     I: band_audio_input::AudioInputStream,
 {
-    const FREQ_BIN_COUNT_CHECK: () = assert!(
-        WINDOW_SIZE / 2 + 1 == FREQ_BIN_COUNT,
-        "FREQ_BIN_COUNT shall match WINDOW_SIZE / 2 + 1"
-    );
-
     /// Create a new frame extractor reading from the given input stream.
     pub fn new(input_stream: I) -> Result<Self, error::FrameExtractorConstructionError> {
-        /* Ensure the const check */
-        let () = Self::FREQ_BIN_COUNT_CHECK;
+        assert_eq!(WINDOW_SIZE / 2 + 1, N_BINS, "N_BINS shall match WINDOW_SIZE / 2 + 1");
 
         if input_stream.sample_rate() != SAMPLE_RATE {
             return Err(error::FrameExtractorConstructionError::SampleRateMismatch {
@@ -62,6 +58,8 @@ where
         let mut fft_planner = realfft::RealFftPlanner::new();
         let planned_fft = fft_planner.plan_fft_forward(WINDOW_SIZE);
 
+        tracing::info!("Created FrameExtractor<SR {}, HOP {}, BINS {}>", SAMPLE_RATE, HOP, N_BINS);
+
         Ok(Self {
             input_stream,
 
@@ -71,7 +69,7 @@ where
             sample_window_end: 0,
             hann_window: Self::build_hann_window::<WINDOW_SIZE>(),
             fft_scratch_input: [0.0; WINDOW_SIZE],
-            fft_output: [realfft::num_complex::c32(0.0, 0.0); FREQ_BIN_COUNT],
+            fft_output: [realfft::num_complex::c32(0.0, 0.0); N_BINS],
 
             next_frame_index: 0,
         })
@@ -83,7 +81,7 @@ where
     /// then will perform the FFT on said window.
     ///
     /// If the underlying source is unavailable or at the end of the input, the same result will be propagated.
-    pub fn next_frame(&mut self) -> Result<NextFrameResult<FREQ_BIN_COUNT>, error::FrameExtractorError<I>> {
+    pub fn next_frame(&mut self) -> Result<NextFrameResult<N_BINS>, FrameExtractorError<I>> {
         loop {
             let buffer: &mut [f32] = &mut self.sample_window[self.sample_window_end..];
 
@@ -101,13 +99,13 @@ where
                 }
                 Ok(band_audio_input::NextSamplesResult::Unavailable) => return Ok(NextFrameResult::Unavailable),
                 Ok(band_audio_input::NextSamplesResult::EndOfInput) => return Ok(NextFrameResult::EndOfInput),
-                Err(error) => return Err(error::FrameExtractorError::AudioInput(error)),
+                Err(error) => return Err(FrameExtractorError::AudioInput(error)),
             }
         }
     }
 
     /// Performs the FFT on the input sample_window and return the result as a spectral frame.
-    fn fft(&mut self) -> Result<crate::SpectralFrame<FREQ_BIN_COUNT>, realfft::FftError> {
+    fn fft(&mut self) -> Result<crate::SpectralFrame<N_BINS>, realfft::FftError> {
         /* Fill the scratch input with the sample window and the hann window */
         for i in 0..WINDOW_SIZE {
             self.fft_scratch_input[i] = self.sample_window[i] * self.hann_window[i];
@@ -138,8 +136,8 @@ where
     }
 }
 
-pub enum NextFrameResult<const FREQ_BIN_COUNT: usize> {
-    Frame(crate::SpectralFrame<FREQ_BIN_COUNT>),
+pub enum NextFrameResult<const N_BINS: usize> {
+    Frame(crate::SpectralFrame<N_BINS>),
     Unavailable,
     EndOfInput,
 }

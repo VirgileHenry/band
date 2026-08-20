@@ -38,7 +38,7 @@ where
         let input_buffer = vec![0.0; resampler.input_frames_max()];
         let output_buffer = vec![0.0; resampler.output_frames_max()];
 
-        tracing::info!("Created resampler<{} -> {}>", input_stream.sample_rate(), TARGET_SAMPLE_RATE);
+        tracing::info!("Created Resampler<{} -> {}>", input_stream.sample_rate(), TARGET_SAMPLE_RATE);
 
         Ok(Self {
             input_stream,

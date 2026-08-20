@@ -21,6 +21,7 @@ pkgs.mkShell rec {
     pkgs.xorg.libXrandr
     pkgs.libxkbcommon
     pkgs.wayland
+    pkgs.libGL
   ];
   LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath buildInputs;
   RUST_BACKTRACE=1;

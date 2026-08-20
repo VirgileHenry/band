@@ -119,6 +119,12 @@ impl crate::AudioInputStream for LiveSource {
     }
 }
 
+impl std::fmt::Debug for LiveSource {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Live Source: {}", self.name)
+    }
+}
+
 /// All currently supported formats
 pub enum LiveSourceFormat {
     F32,
