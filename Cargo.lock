@@ -80,6 +80,7 @@ name = "band_frame_extractor"
 version = "0.1.0"
 dependencies = [
  "band_audio_input",
+ "realfft",
 ]
 
 [[package]]

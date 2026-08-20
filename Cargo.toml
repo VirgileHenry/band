@@ -19,6 +19,7 @@ band_tools = { path = "./band_tools" }
 
 # Dependencies
 cpal = "0.18.2"
+realfft = "3.5.0"
 ringbuf = "0.5.1"
 rubato = "5.0.0"
 tracing = "0.1.44"

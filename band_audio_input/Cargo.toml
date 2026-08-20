@@ -9,3 +9,6 @@ cpal = { workspace = true }
 ringbuf = { workspace = true }
 rubato = { workspace = true }
 tracing = { workspace = true }
+
+[features]
+test-utils = []

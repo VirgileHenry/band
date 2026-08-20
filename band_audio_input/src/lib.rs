@@ -10,5 +10,5 @@ pub use live_source::AvailableSourceLiveCapture;
 pub use live_source::LiveSource;
 pub use resampler::Resampler;
 
-#[cfg(test)]
-pub(crate) mod sin;
+#[cfg(any(test, feature = "test-utils"))]
+pub mod sin;
